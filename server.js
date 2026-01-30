@@ -2,45 +2,23 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+const connectDB = require('./config/database')
 const TodoTask = require('./models/todotask')
-require('dotenv').config()
+const homeRoutes = require('./routes/home')
+const editRoutes = require('./routes/edit')
+require('dotenv').config({ path: './config/.env' })
 const PORT = 8000
+
+connectDB()
 
 //set middleware
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 
-mongoose.connect(process.env.DB,
-    { useNewUrlParser: true },
-    () => { console.log('connected to db') })
-
-//Get/Read method
-app.get("/", async (req, res) => {
-    try {
-        TodoTask.find({}, (err, tasks) => {
-            res.render("index.ejs", { todoTasks: tasks })
-        })
-    } catch (err) {
-        if (err) return res.status(500).send(err)
-    }
-})
-
-//Post/Create method
-app.post('/', async (req, res) => {
-    const todoTask = new TodoTask({
-        title: req.body.title,
-        content: req.body.content
-    })
-    try {
-        await todoTask.save()
-        console.log(todoTask)
-        res.redirect('/')
-    } catch {
-        if (err) return res.status(500).send(err)
-        res.redirect('/')
-    }
-})
+//Set Routes
+app.use('/', homeRoutes)
+// app.use('/edit', editRoutes)
 
 //Post/Update method
 app
@@ -78,6 +56,6 @@ app
     })
 
 //Server
-app.listen(PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
     console.log(`Server is running on ${PORT}.`)
 })
