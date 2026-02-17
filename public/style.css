@@ -139,3 +139,7 @@ ul {
     cursor: pointer;
     text-decoration: none;
 }
+
+.logout {
+    color: white;
+}
