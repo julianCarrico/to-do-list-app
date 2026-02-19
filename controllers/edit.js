@@ -1,4 +1,4 @@
-const TodoTask = require('../models/todotask')
+const TodoTask = require('../models/Todotask')
 
 module.exports = {
     getEdit: (req, res) => {
@@ -11,7 +11,7 @@ module.exports = {
         const id = req.params.id;
         TodoTask.findByIdAndRemove(id, err => {
             if (err) return res.send(500, err);
-            res.redirect("/");
+            res.redirect("/todos");
         });
     },
     updateTask: (req, res) => {
@@ -24,7 +24,7 @@ module.exports = {
             },
             err => {
                 if (err) return res.status(500).send(err);
-                res.redirect("/");
+                res.redirect("/todos");
             });
     }
 }

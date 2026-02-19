@@ -4,7 +4,7 @@ const User = require('../models/User')
 
 exports.getLogin = (req, res) => {
     if (req.user) {
-        return res.redirect('/')
+        return res.redirect('/todos')
     }
     res.render('login', {
         title: 'Login'
@@ -31,7 +31,7 @@ exports.postLogin = (req, res, next) => {
         req.logIn(user, (err) => {
             if (err) { return next(err) }
             req.flash('success', { msg: 'Success! You are logged in.' })
-            res.redirect(req.session.returnTo || '/')
+            res.redirect(req.session.returnTo || '/todos')
         })
     })(req, res, next)
 }
@@ -43,13 +43,13 @@ exports.logout = (req, res) => {
     req.session.regenerate((err) => {
         if (err) console.log('Error : Failed to destroy the session during logout.', err)
         req.user = null
-        res.redirect('/login')
+        res.redirect('/')
     })
 }
 
 exports.getSignup = (req, res) => {
     if (req.user) {
-        return res.redirect('/')
+        return res.redirect('/todos')
     }
     res.render('signup', {
         title: 'Create Account'
@@ -91,7 +91,7 @@ exports.postSignup = (req, res, next) => {
                 if (err) {
                     return next(err)
                 }
-                res.redirect('/')
+                res.redirect('/todos')
             })
         })
     })

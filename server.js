@@ -10,6 +10,7 @@ const logger = require('morgan')
 const connectDB = require('./config/database')
 const homeRoutes = require('./routes/home')
 const editRoutes = require('./routes/edit')
+const todoRoutes = require('./routes/todo')
 
 require('dotenv').config({ path: './config/.env' })
 
@@ -44,6 +45,7 @@ app.use(flash())
 //Set Routes
 app.use('/', homeRoutes)
 app.use('/edit', editRoutes)
+app.use('/todos', todoRoutes)
 
 //Server
 app.listen(process.env.PORT, () => {

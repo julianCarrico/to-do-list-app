@@ -8,12 +8,12 @@ const authContorller = require('../controllers/auth')
 const { ensureAuth } = require('../middleware/auth')
 
 //add specific routes for specific tasks
+router.get('/', homeController.getIndex)
 router.get('/login', authContorller.getLogin)
 router.post('/login', authContorller.postLogin)
 router.get('/logout', authContorller.logout)
 router.get('/signup', authContorller.getSignup)
 router.post('/signup', authContorller.postSignup)
-router.get('/', ensureAuth, homeController.getIndex)
-router.post('/', homeController.createTask)
+
 
 module.exports = router
