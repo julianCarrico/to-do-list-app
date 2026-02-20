@@ -193,3 +193,11 @@ input[type="submit"]:hover {
     margin-top: 10px;
     padding: 8px;
 }
+
+.login-btn:hover {
+    color: lightgray;
+}
+
+.alert {
+    color: red;
+}
