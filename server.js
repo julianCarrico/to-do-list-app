@@ -1,7 +1,6 @@
 //Declare variables
 const express = require('express')
 const app = express()
-const mongoose = require('mongoose')
 const passport = require('passport')
 const session = require('express-session')
 const MongoStore = require('connect-mongo').default
@@ -15,7 +14,7 @@ const todoRoutes = require('./routes/todo')
 require('dotenv').config({ path: './config/.env' })
 
 //passport config
-require('./config/passport')(passport)
+require('./config/passport')
 
 connectDB()
 

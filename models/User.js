@@ -32,9 +32,7 @@ UserSchema.pre('save', async function (next) {
 UserSchema.methods.comparePassword = async function (candidatePassword, cb) {
     try {
         // Returns true if passwords match, false otherwise
-        return await bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-            cb(err, isMatch)
-        });
+        return await bcrypt.compare(candidatePassword, this.password);
     } catch (err) {
         // Rethrow or handle encryption/comparison errors
         throw new Error(err);
