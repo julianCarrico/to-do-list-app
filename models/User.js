@@ -10,27 +10,36 @@ const UserSchema = new mongoose.Schema({
 
 // Password hash middleware.
 
-UserSchema.pre('save', function save(next) {
-    const user = this
-    if (!user.isModified('password')) { return next() }
-    bcrypt.genSalt(10, (err, salt) => {
-        if (err) { return next(err) }
-        bcrypt.hash(user.password, salt, (err, hash) => {
-            if (err) { return next(err) }
-            user.password = hash
-            next()
-        })
-    })
-})
+UserSchema.pre('save', async function (next) {
+    // Only hash the password if it has been modified (or is new)
+    if (!this.isModified('password')) {
+        return next();
+    }
+
+    try {
+        // Automatically generates salt and hashes in one go
+        const saltRounds = 10;
+        this.password = await bcrypt.hash(this.password, saltRounds);
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
 
 
 // Helper method for validating user's password.
 
-UserSchema.methods.comparePassword = function comparePassword(candidatePassword, cb) {
-    bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-        cb(err, isMatch)
-    })
-}
+UserSchema.methods.comparePassword = async function (candidatePassword, cb) {
+    try {
+        // Returns true if passwords match, false otherwise
+        return await bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+            cb(err, isMatch)
+        });
+    } catch (err) {
+        // Rethrow or handle encryption/comparison errors
+        throw new Error(err);
+    }
+};
 
 
 module.exports = mongoose.model('User', UserSchema)
