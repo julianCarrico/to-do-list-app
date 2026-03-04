@@ -10,19 +10,19 @@ const UserSchema = new mongoose.Schema({
 
 // Password hash middleware.
 
-UserSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function () {
     // Only hash the password if it has been modified (or is new)
     if (!this.isModified('password')) {
-        return next();
+        return; // Just return, don't call next()
     }
 
     try {
-        // Automatically generates salt and hashes in one go
         const saltRounds = 10;
         this.password = await bcrypt.hash(this.password, saltRounds);
-        next();
+        // No next() call needed here
     } catch (err) {
-        next(err);
+        // If you need to throw an error, Mongoose will catch it
+        throw err;
     }
 });
 
